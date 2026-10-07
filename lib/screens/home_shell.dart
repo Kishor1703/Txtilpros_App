@@ -4,6 +4,7 @@ import '../app_state.dart';
 import '../theme.dart';
 import 'service/service_module.dart';
 import 'sales/sales_module.dart';
+import 'chat_screen.dart';
 
 /// Ports the top-level routing behaviour split across ReportingPortalPage.jsx
 /// and SalesPortalPage.jsx: a Sales-only user only ever sees the Sales
@@ -37,6 +38,11 @@ class _HomeShellState extends State<HomeShell> {
 
     return Scaffold(
       backgroundColor: AppColors.bg,
+      floatingActionButton: ['employee', 'manager', 'admin'].contains(state.user?['role'])
+          ? FloatingActionButton.extended(
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ChatScreen())),
+              icon: const Icon(Icons.chat_bubble_outline), label: const Text('Chat'))
+          : null,
       body: SafeArea(
         child: module == 'sales'
             ? SalesModule(onOpenService: state.isOwner ? () => setState(() => module = 'service') : null)
